@@ -906,7 +906,8 @@ void evalAutoRNS(RlweCiphertext& result1, RlweCiphertext& result2,
     // keyswitch
     std::vector<std::vector<uint64_t> > dec_a(ellnum, std::vector<uint64_t>(length, 0));
     std::vector<std::vector<uint64_t> > dec_a2(ellnum, std::vector<uint64_t>(length, 0));
-    decompose_crt(dec_a, dec_a2, temp_a1, temp_a2, ellnum, autokey.getBase(), autokey.getBg());
+    // decompose_crt(dec_a, dec_a2, temp_a1, temp_a2, ellnum, autokey.getBase(), autokey.getBg());
+    decompose_bsgs(dec_a, dec_a2, temp_a1, temp_a2, ellnum, autokey.getBase(), autokey.getBg());
 
     std::vector<RlweCiphertext> autokey_index = autokey.keyMap.at(index);
 

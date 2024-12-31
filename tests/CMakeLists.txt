@@ -50,3 +50,8 @@ target_link_libraries(test-multi              pir HEXL::hexl)
 target_link_libraries(test-fft                pir)
 target_link_libraries(test-ntt-speed          pir HEXL::hexl)
 target_link_libraries(test-avx512             pir HEXL::hexl)
+
+
+add_executable(test-fspiral         ${PROJECT_SOURCE_DIR}/tests/test-fspiral.cpp)
+target_include_directories(test-fspiral          PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(test-fspiral             pir HEXL::hexl)

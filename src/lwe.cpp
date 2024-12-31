@@ -402,6 +402,11 @@ bool RGSWCiphertext::getIsNtt() const
     return this->isntt;
 }
 
+void RGSWCiphertext::setIsNtt(bool is)
+{
+    this->isntt = is;
+}
+
 #ifdef INTEL_HEXL
 intel::hexl::NTT RGSWCiphertext::getNTT() const
 {
@@ -621,13 +626,20 @@ AutoKeyRNS::AutoKeyRNS(/* args */)
 #endif  
 }
 
-AutoKeyRNS::AutoKeyRNS(int32_t len, uint64_t module1, uint64_t module2, int32_t elln) :
-         length(len), modulus1(module1), modulus2(module2), ellnum(elln)
+AutoKeyRNS::AutoKeyRNS(int32_t len, uint64_t module1, uint64_t module2, int32_t elln, uint64_t base, uint64_t bg) :
+         length(len), modulus1(module1), modulus2(module2), ellnum(elln), PP(base), BBg(bg)
 {
-
 #ifdef INTEL_HEXL
-    intel::hexl::NTT ntts1(length, modulus1);
-    this->ntts1 = ntts1;
+    // intel::hexl::NTT ntts1(length, modulus1);
+    // this->ntts1 = ntts1;
+    if (modulus1 == crtMod)
+    {
+        intel::hexl::NTT ntts(N, crtMod, root_of_unity_crt);
+        this->ntts1 = ntts;
+    } else {
+        intel::hexl::NTT ntts(length, modulus1);
+        this->ntts1 = ntts;
+    }
 
     intel::hexl::NTT ntts2(length, modulus2);
     this->ntts2 = ntts2;
@@ -670,7 +682,7 @@ void AutoKeyRNS::generateSingleKey(std::vector<RlweCiphertext>& result, int32_t 
 
         // rns encryption, these rlwes is in ntt form.
         encrypt_rns(result[i].b, result[i].a, result[i + ellnum].b, result[i + ellnum].a,
-                    secret, temp1, temp2);
+                    secret, temp1, temp2, 1, this->modulus2);
         //encrypt_special_rns(result[i].b, result[i].a, result[i + ellnum].b, result[i + ellnum].a,
         //            secret, temp1, temp2, num);
         
@@ -693,7 +705,7 @@ void AutoKeyRNS::keyGen(Secret& secret, const int32_t num)
         indexLists.push_back(index);
     }
 
-    std::vector<RlweCiphertext> key_for_index(this->ellnum * 2);
+    std::vector<RlweCiphertext> key_for_index(this->ellnum * 2, RlweCiphertext(length, this->modulus1));
 
     for (auto index : indexLists)
     {

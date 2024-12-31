@@ -1,11 +1,11 @@
 Private Information Retrieval (PIR)
- Protocol kspir
+ Protocol faster Spiral
 =====
 
 ***
 
  
-The [kspir](https://github.com/parsear/kspir) is the implement of the paper [Faster FHE-based Single-Server Private Information Retrieval]. This library will be continuously updated to support more features.
+The [faster Spiral](https://github.com/parsear/fspiral) is the implement of the paper [Faster Spiral: Low-Communication, High-Rate Private Information Retrieval]. This library will be continuously updated to support more features.
 
 ## Requirements
 The runnig of this code requires a basic c++ toolchain, including
@@ -40,27 +40,27 @@ sudo make install
 After install [Intel HEXL](https://github.com/intel/hexl), you can build and run our PIR protocol by
 
 ```
-cd kspir
+cd fspiral
 mkdir build
 cd build
 cmake ..
 make
-./tests/test-pir
+./tests/test-fspiral
 ```
 
 
 An example output:
 ```
-Packing number: 16
-Database configuration: 32768 * 8 KB, total database size 256 MB
-BSGS parameters: (N1: 128, N2: 16)
+Database: 128 * 256 * R_p, (total 288 MB)
 
-target_col: 177, target_packing: 4
+target (row, col) = (46, 229)
+ preprocess costs 2553399 us.
+keyGen Done.
+ query generate costs 1959 us.
+ online server response costs 1239194 us.
+The err is [758268062, 2372643108, 66974689664262136, 2329731913, 676875373, 1281929247, 2376661815, 824912486, 66974689737105656, 1182736430, 1140187905, 1140267775, 1279705346, 1337510525, 1080414943, 961909084, ..., 66974687046202803]
+ recover costs 275 us.
 
- server preprocessing costs 4144 ms.
- query costs 7873 us.
- online server response costs 236635 us.
- decrypt costs 284 us.
-
-the recovered result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ..., 4096]
+The decrypted value is [103937, 4728, 162395, 84485, 107484, 245835, 144626, 248980, 97776, 108081, 221164, 13151, 93770, 152874, 195204, 115399, ..., 159144]
+The correct   value is [103937, 4728, 162395, 84485, 107484, 245835, 144626, 248980, 97776, 108081, 221164, 13151, 93770, 152874, 195204, 115399, ..., 159144]
 ```

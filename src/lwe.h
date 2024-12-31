@@ -161,6 +161,8 @@ public:
 
     bool getIsNtt() const;
 
+    void setIsNtt(bool is);
+
 #ifdef INTEL_HEXL
     intel::hexl::NTT getNTT() const;
 #endif
@@ -262,7 +264,7 @@ public:
 
     AutoKeyRNS(/* args */);
 
-    AutoKeyRNS(int32_t len, uint64_t module1, uint64_t module2, int32_t elln);
+    AutoKeyRNS(int32_t len, uint64_t module1, uint64_t module2, int32_t elln, uint64_t base, uint64_t bg);
 
     void generateSingleKey(std::vector<RlweCiphertext>& result, int32_t index,
                     int32_t num, Secret& secret);
